@@ -1,7 +1,48 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Download, MapPin, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowRight, Download, MapPin, Github, Linkedin, Mail, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Hero = () => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { toast } = useToast();
+
+  const handleDownload = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (isDownloading) return;
+
+    setIsDownloading(true);
+
+    // Show download started toast (auto dismiss after 3.5 seconds)
+    toast({
+      title: "📄 Resume Download Started",
+      description: "Thank you for your interest! My resume is downloading. Feel free to explore my projects or contact me if you'd like to connect.",
+      duration: 3500,
+    });
+
+    try {
+      const link = document.createElement("a");
+      link.href = "/resume/Fardin_Khirani_Resume.pdf";
+      link.download = "Fardin_Khirani_Resume.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      // Fallback: open in new tab
+      window.open("/resume/Fardin_Khirani_Resume.pdf", "_blank", "noopener,noreferrer");
+      toast({
+        title: "Download Blocked",
+        description: "Your browser prevented the download. A new tab has been opened where you can view or download the resume manually.",
+        variant: "destructive",
+        duration: 4000,
+      });
+    }
+
+    setTimeout(() => {
+      setIsDownloading(false);
+    }, 1500);
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center px-4 md:px-6 pt-24 pb-16 overflow-hidden">
       {/* subtle grid backdrop */}
@@ -69,16 +110,19 @@ const Hero = () => {
                 View Projects
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
               </a>
-              <a
-                href="/resume/Fardin_Khirani_Resume.pdf"
-                download="Fardin_Khirani_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-semibold text-foreground hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-[0_0_15px_hsl(var(--accent)/0.2)] transition-all duration-300 group/btn"
+              <button
+                onClick={handleDownload}
+                disabled={isDownloading}
+                aria-label={isDownloading ? "Downloading resume..." : "Download Fardin Khirani Resume"}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-semibold text-foreground hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-[0_0_15px_hsl(var(--accent)/0.2)] transition-all duration-300 group/btn disabled:opacity-85 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               >
-                <Download className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-y-0.5" />
-                Download Resume
-              </a>
+                {isDownloading ? (
+                  <Loader2 className="w-4 h-4 animate-spin text-accent" />
+                ) : (
+                  <Download className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-y-0.5" />
+                )}
+                {isDownloading ? "Downloading..." : "Download Resume"}
+              </button>
 
               <div className="flex items-center gap-3 ml-2 sm:ml-4 border-l border-border pl-4 sm:pl-6 h-8">
                 <a
