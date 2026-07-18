@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fardin-92.github.io/sitemap.xml
