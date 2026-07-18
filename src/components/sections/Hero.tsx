@@ -70,7 +70,10 @@ const Hero = () => {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-300" />
               </a>
               <a
-                href="#contact"
+                href="/resume/Fardin_Khirani_Resume.pdf"
+                download="Fardin_Khirani_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-6 py-3 text-sm font-semibold text-foreground hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-[0_0_15px_hsl(var(--accent)/0.2)] transition-all duration-300 group/btn"
               >
                 <Download className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-y-0.5" />
